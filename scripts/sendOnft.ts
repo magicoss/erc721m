@@ -39,7 +39,7 @@ export const sendOnft = async (
     const fees = await contract.estimateSendFee(targetChainId, newOwner, args.tokenid, /* useZro= */false, adapterParams);
 
     const nativeFee = fees[0];
-    console.log(`native fees (wei): ${nativeFee}`)
+    console.log(`native fees (wei): ${nativeFee}`);
     console.log(`Going to send tokenId: ${args.tokenid} from ${hre.network.name}/${args.contract} owned by ${owner} \n\rto \n\r trusted remote on ${args.targetnetwork} owned by ${newOwner} `);
     if (!await confirm({ message: 'Continue?' })) return;
 

@@ -36,6 +36,7 @@ describe('ERC721MAutoApprover', () => {
     await contract.setStages([
       {
         price: ethers.utils.parseEther('0.5'),
+        mintFee: ethers.utils.parseEther('0.5'),
         walletLimit: 0,
         merkleRoot: ethers.utils.hexZeroPad('0x0', 32),
         maxStageSupply: 100,
@@ -55,7 +56,7 @@ describe('ERC721MAutoApprover', () => {
 
     // Mint 1 token
     await contract.mint(1, [ethers.utils.hexZeroPad('0x', 32)], 0, '0x00', {
-      value: ethers.utils.parseEther('50'),
+      value: ethers.utils.parseEther('1'),
     });
 
     // approval should be set
@@ -75,6 +76,7 @@ describe('ERC721MAutoApprover', () => {
     await contract.setStages([
       {
         price: ethers.utils.parseEther('0.5'),
+        mintFee: ethers.utils.parseEther('0.5'),
         walletLimit: 0,
         merkleRoot: ethers.utils.hexZeroPad('0x0', 32),
         maxStageSupply: 100,
@@ -97,7 +99,7 @@ describe('ERC721MAutoApprover', () => {
 
     // Mint 1 token
     await contract.mint(1, [ethers.utils.hexZeroPad('0x', 32)], 0, '0x00', {
-      value: ethers.utils.parseEther('50'),
+      value: ethers.utils.parseEther('1'),
     });
 
     // approval should not be set

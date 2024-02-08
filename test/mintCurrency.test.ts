@@ -9,9 +9,11 @@ describe('Mint Currency', () => {
     erc20: Contract,
     owner: Signer,
     minter: Signer;
-  const mintPrice = 50,
-    mintQty = 3,
-    mintCost = mintPrice * mintQty;
+  const mintPrice = 50;
+  const mintFee = 10;
+  const mintQty = 3;
+  const mintCost = (mintPrice + mintFee) * mintQty;
+  const MINT_FEE_RECEIVER = '0x0B98151bEdeE73f9Ba5F2C7b72dEa02D38Ce49Fc';
 
   describe('deployed with ERC-20 token as mint currency', function () {
     beforeEach(async function () {
@@ -47,6 +49,7 @@ describe('Mint Currency', () => {
       await contract.setStages([
         {
           price: mintPrice,
+          mintFee: mintFee,
           walletLimit: 0,
           merkleRoot: ethers.utils.hexZeroPad('0x0', 32),
           maxStageSupply: 5,
@@ -115,7 +118,10 @@ describe('Mint Currency', () => {
         expect(postMintBalance).to.equal(minterBalance - mintCost);
 
         const contractBalance = await erc20.balanceOf(contract.address);
-        expect(contractBalance).to.equal(mintCost);
+        expect(contractBalance).to.equal(mintPrice * mintQty);
+
+        const mintFeeReceiverBalance = await erc20.balanceOf(MINT_FEE_RECEIVER);
+        expect(mintFeeReceiverBalance).to.equal(mintFee * mintQty);
 
         const totalMintedByMinter = await contract.totalMintedByAddress(
           await minter.getAddress(),

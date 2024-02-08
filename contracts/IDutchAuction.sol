@@ -7,7 +7,6 @@ interface IDutchAuction {
     error NotEnded();
     error InvalidAmountInWei();
     error NotRefundable();
-    error TransferFailed();
     error UserAlreadyClaimed();
 
     struct User {

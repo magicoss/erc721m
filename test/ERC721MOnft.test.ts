@@ -48,6 +48,7 @@ describe('ERC721MOnft Test', () => {
       await contract.setStages([
         {
           price: mintPrice,
+          mintFee: 0,
           walletLimit: 0,
           merkleRoot: ethers.utils.hexZeroPad('0x0', 32),
           maxStageSupply: 5,

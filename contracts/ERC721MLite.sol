@@ -154,6 +154,7 @@ contract ERC721MLite is
             _mintStages.push(
                 MintStageInfo({
                     price: newStages[i].price,
+                    mintFee: newStages[i].mintFee,
                     walletLimit: newStages[i].walletLimit,
                     merkleRoot: newStages[i].merkleRoot,
                     maxStageSupply: newStages[i].maxStageSupply,
@@ -164,6 +165,7 @@ contract ERC721MLite is
             emit UpdateStage(
                 i,
                 newStages[i].price,
+                newStages[i].mintFee,
                 newStages[i].walletLimit,
                 newStages[i].merkleRoot,
                 newStages[i].maxStageSupply,

@@ -22,6 +22,7 @@ interface IERC721M is IERC721AQueryable {
     error Mintable();
     error StageSupplyExceeded();
     error TimestampExpired();
+    error TransferFailed();
     error WalletGlobalLimitExceeded();
     error WalletStageLimitExceeded();
     error WithdrawFailed();
@@ -29,6 +30,7 @@ interface IERC721M is IERC721AQueryable {
 
     struct MintStageInfo {
         uint80 price;
+        uint80 mintFee;
         uint32 walletLimit; // 0 for unlimited
         bytes32 merkleRoot; // 0x0 for no presale enforced
         uint24 maxStageSupply; // 0 for unlimited
@@ -39,6 +41,7 @@ interface IERC721M is IERC721AQueryable {
     event UpdateStage(
         uint256 stage,
         uint80 price,
+        uint80 mintFee,
         uint32 walletLimit,
         bytes32 merkleRoot,
         uint24 maxStageSupply,

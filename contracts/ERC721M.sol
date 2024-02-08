@@ -65,6 +65,9 @@ contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
     // Address of ERC-20 token used to pay for minting. If 0 address, use native currency.
     address private _mintCurrency;
 
+    address public constant MINT_FEE_RECEIVER =
+        address(0x0B98151bEdeE73f9Ba5F2C7b72dEa02D38Ce49Fc);
+
     constructor(
         string memory collectionName,
         string memory collectionSymbol,
@@ -179,6 +182,7 @@ contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
             _mintStages.push(
                 MintStageInfo({
                     price: newStages[i].price,
+                    mintFee: newStages[i].mintFee,
                     walletLimit: newStages[i].walletLimit,
                     merkleRoot: newStages[i].merkleRoot,
                     maxStageSupply: newStages[i].maxStageSupply,
@@ -189,6 +193,7 @@ contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
             emit UpdateStage(
                 i,
                 newStages[i].price,
+                newStages[i].mintFee,
                 newStages[i].walletLimit,
                 newStages[i].merkleRoot,
                 newStages[i].maxStageSupply,
@@ -304,6 +309,7 @@ contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
     function updateStage(
         uint256 index,
         uint80 price,
+        uint80 mintFee,
         uint32 walletLimit,
         bytes32 merkleRoot,
         uint24 maxStageSupply,
@@ -334,6 +340,7 @@ contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
         emit UpdateStage(
             index,
             price,
+            mintFee,
             walletLimit,
             merkleRoot,
             maxStageSupply,
@@ -414,8 +421,10 @@ contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
         stage = _mintStages[activeStage];
 
         // Check value if minting with ETH
-        if (_mintCurrency == address(0) && msg.value < stage.price * qty)
-            revert NotEnoughValue();
+        if (
+            _mintCurrency == address(0) &&
+            msg.value < (stage.price + stage.mintFee) * qty
+        ) revert NotEnoughValue();
 
         // Check stage supply if applicable
         if (stage.maxStageSupply > 0) {
@@ -448,11 +457,23 @@ contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
         }
 
         if (_mintCurrency != address(0)) {
+            // ERC20 mint payment
             IERC20(_mintCurrency).safeTransferFrom(
                 msg.sender,
                 address(this),
                 stage.price * qty
             );
+            IERC20(_mintCurrency).safeTransferFrom(
+                msg.sender,
+                address(MINT_FEE_RECEIVER),
+                stage.mintFee * qty
+            );
+        } else {
+            // ETH mint payment
+            (bool success, ) = MINT_FEE_RECEIVER.call{
+                value: stage.mintFee * qty
+            }("");
+            if (!success) revert TransferFailed();
         }
 
         _stageMintedCountsPerWallet[activeStage][to] += qty;

@@ -36,6 +36,7 @@ describe('ERC721MPausableOperatorFilterer', function () {
     await erc721MPausableOperatorFilterer.setStages([
       {
         price: ethers.utils.parseEther('0.5'),
+        mintFee: 0,
         walletLimit: 0,
         merkleRoot: ethers.utils.hexZeroPad('0x0', 32),
         maxStageSupply: 5,

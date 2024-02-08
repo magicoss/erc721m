@@ -12,6 +12,7 @@ export interface ISetStagesParams {
 
 interface StageConfig {
   price: string;
+  mintFee?: string;
   startDate: number;
   endDate: number;
   walletLimit?: number;
@@ -58,6 +59,7 @@ export const setStages = async (
 
   const stages = stagesConfig.map((s, i) => ({
     price: ethers.utils.parseEther(s.price),
+    mintFee: s.mintFee ? ethers.utils.parseEther(s.mintFee) : 0,
     maxStageSupply: s.maxSupply ?? 0,
     walletLimit: s.walletLimit ?? 0,
     merkleRoot: merkleRoots[i],
