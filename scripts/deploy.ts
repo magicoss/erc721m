@@ -82,13 +82,14 @@ export const deploy = async (
     overrides.gasLimit = hre.ethers.BigNumber.from(args.gaslimit);
   }
 
+  contractName = 'Visions';
   const contractFactory = await hre.ethers.getContractFactory(contractName);
 
   const params = [
     args.name,
     args.symbol,
     args.tokenurisuffix,
-    maxsupply,
+    //maxsupply,
     hre.ethers.BigNumber.from(args.globalwalletlimit),
     args.cosigner ?? hre.ethers.constants.AddressZero,
     args.timestampexpiryseconds ?? 300,
@@ -105,6 +106,11 @@ export const deploy = async (
       args.erc2198royaltyfeenumerator ?? 0,
     );
   }
+
+  params.push(
+    1711606451,
+    '0x69C3Cc3a652e72Da3748387005BFC48DF6EaBF78',
+  )
 
   console.log(
     `Going to deploy ${contractName} with params`,
