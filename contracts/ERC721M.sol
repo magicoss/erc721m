@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "erc721a/contracts/extensions/ERC721AQueryable.sol";
+import "erc721a/contracts/extensions/ERC721ABurnable.sol";
 import "./IERC721M.sol";
 import "./utils/Constants.sol";
 
@@ -22,7 +23,7 @@ import "./utils/Constants.sol";
  *  - crossmint support
  *  - anti-botting
  */
-contract ERC721M is IERC721M, ERC721AQueryable, Ownable, ReentrancyGuard {
+contract ERC721M is IERC721M, ERC721ABurnable, ERC721AQueryable, Ownable, ReentrancyGuard {
     using ECDSA for bytes32;
     using SafeERC20 for IERC20;
 
