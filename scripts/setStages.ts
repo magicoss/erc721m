@@ -24,6 +24,31 @@ interface StageConfig {
   variableWalletLimitPath?: string;
 }
 
+function isValidDate(dateString: string): boolean {
+  const date = new Date(dateString);
+  return date instanceof Date && !isNaN(date.getTime());
+}
+
+function validateAndConvertDates(stage: StageConfig) {
+  const { startDate, endDate } = stage;
+
+  if (!isValidDate(startDate.toString()) || !isValidDate(endDate.toString())) {
+    throw new Error("Invalid start or end date");
+  }
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (end <= start) {
+    throw new Error("End date must be after start date");
+  }
+
+  const startTimeUnixSeconds = Math.floor(start.getTime() / 1000);
+  const endTimeUnixSeconds = Math.floor(end.getTime() / 1000);
+
+  return { startTimeUnixSeconds, endTimeUnixSeconds };
+}
+
 export const setStages = async (
   args: ISetStagesParams,
   hre: HardhatRuntimeEnvironment,
@@ -91,16 +116,19 @@ export const setStages = async (
     }),
   );
 
-  const stages = stagesConfig.map((s, i) => ({
-    price: ethers.utils.parseEther(s.price),
-    mintFee: s.mintFee ? ethers.utils.parseEther(s.mintFee) : 0,
-    maxStageSupply: s.maxSupply ?? 0,
-    walletLimit: s.walletLimit ?? 0,
-    merkleRoot: merkleRoots[i],
-    startTimeUnixSeconds: Math.floor(new Date(s.startDate).getTime() / 1000),
-    endTimeUnixSeconds: Math.floor(new Date(s.endDate).getTime() / 1000),
-  }));
+  const stages = stagesConfig.map((s, i) => {
+    const { startTimeUnixSeconds, endTimeUnixSeconds } = validateAndConvertDates(s);
 
+    return {
+      price: ethers.utils.parseEther(s.price),
+      mintFee: s.mintFee ? ethers.utils.parseEther(s.mintFee) : 0,
+      maxStageSupply: s.maxSupply ?? 0,
+      walletLimit: s.walletLimit ?? 0,
+      merkleRoot: merkleRoots[i],
+      startTimeUnixSeconds,
+      endTimeUnixSeconds,
+    };
+  });
   console.log(
     `Stage params: `,
     JSON.stringify(
