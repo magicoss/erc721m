@@ -9,6 +9,7 @@ export const ContractDetails = {
   ERC721MOperatorFilterer: { name: 'ERC721MOperatorFilterer' }, // ERC721M with operator filterer
   ERC721CMRoyaltiesCloneFactory: { name: 'ERC721CMRoyaltiesCloneFactory' }, // ERC721CMRoyaltiesCloneFactory
   BucketAuction: { name: 'BucketAuction' }, // The contract of bucket auctions
+  ERC1155M: { name: 'ERC1155M' }, // ERC1155M
 } as const;
 
 export const ERC721BatchTransferContract =

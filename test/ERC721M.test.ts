@@ -10,8 +10,6 @@ const MINT_FEE_RECEIVER = '0x0B98151bEdeE73f9Ba5F2C7b72dEa02D38Ce49Fc';
 
 chai.use(chaiAsPromised);
 
-const ONE_HUNDRED_ETH = '0x56BC75E2D63100000';
-
 describe('ERC721M', function () {
   let contract: ERC721M;
   let readonlyContract: ERC721M;
@@ -1233,16 +1231,6 @@ describe('ERC721M', function () {
 
       // Setup the test context: Update block.timestamp to comply to the stage being active
       await ethers.provider.send('evm_mine', [stageStart - 1]);
-
-      await ethers.provider.send('hardhat_setBalance', [
-        ownerAddress,
-        ONE_HUNDRED_ETH,
-      ]);
-
-      await ethers.provider.send('hardhat_setBalance', [
-        readerAddress,
-        ONE_HUNDRED_ETH,
-      ]);
 
       // Owner mints 1 token with valid proof
       await contract.mintWithLimit(1, 2, ownerProof, 0, '0x00', {

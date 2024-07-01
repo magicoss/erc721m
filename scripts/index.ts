@@ -1,4 +1,5 @@
-export { deploy } from './deploy';
+export * from './deploy';
+export * from './deploy1155';
 export * from './deployBA';
 export * from './deployClone';
 export * from './mint';
@@ -9,6 +10,7 @@ export * from './setGlobalWalletLimit';
 export * from './setMaxMintableSupply';
 export * from './setMintable';
 export * from './setStages';
+export * from './set1155Stages';
 export * from './setTimestampExpirySeconds';
 export * from './transferOwnership';
 export * from './setStartAndEndTimeUnixSeconds';

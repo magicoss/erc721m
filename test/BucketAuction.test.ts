@@ -162,10 +162,6 @@ describe('BucketAuction', function () {
     it('Can make bids', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
       await expect(readonlyConn.bid({ value: 100 })).to.emit(
         readonlyConn,
         'Bid',
@@ -325,10 +321,6 @@ describe('BucketAuction', function () {
       it(`Bid: ${run.bids}, price: ${run.price}`, async () => {
         // Active auction by setting the block.timestamp to the start time of the auction
         await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-        await ethers.provider.send('hardhat_setBalance', [
-          readonly.address,
-          ONE_ETH,
-        ]);
 
         for (const bid of run.bids) {
           await expect(readonlyConn.bid({ value: bid })).to.emit(
@@ -374,10 +366,6 @@ describe('BucketAuction', function () {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
       // we can make bids
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
       let balance = (
         await ownerConn.provider.getBalance(ownerConn.address)
       ).toNumber();
@@ -446,10 +434,6 @@ describe('BucketAuction', function () {
     it('Reverts if price not set', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
       await expect(readonlyConn.bid({ value: 100 })).to.emit(
         readonlyConn,
         'Bid',
@@ -467,10 +451,6 @@ describe('BucketAuction', function () {
     it('Reverts if not claimable', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
       await expect(readonlyConn.bid({ value: 100 })).to.emit(
         readonlyConn,
         'Bid',
@@ -488,10 +468,6 @@ describe('BucketAuction', function () {
     it('Reverts if not enough supply', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
 
       await expect(readonlyConn.bid({ value: 1001 })).to.emit(
         readonlyConn,
@@ -512,10 +488,6 @@ describe('BucketAuction', function () {
     it('Can NOT set price if the first token already sent', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
 
       await expect(readonlyConn.bid({ value: 100 })).to.emit(
         readonlyConn,
@@ -543,10 +515,6 @@ describe('BucketAuction', function () {
     it('Reverts if token already sent or refund already claimed', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
 
       await expect(readonlyConn.bid({ value: 100 })).to.emit(
         readonlyConn,
@@ -596,10 +564,6 @@ describe('BucketAuction', function () {
     it('sendTokensAndRefund', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
 
       let balance = (
         await ownerConn.provider.getBalance(ownerConn.address)
@@ -655,11 +619,7 @@ describe('BucketAuction', function () {
       const readonly2Address = await readonly2.getAddress();
       const readonlyConn2 = ba.connect(readonly2);
 
-      // Fund reader and reader2 for testing
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
+      // Fund reader2 for testing (reader is already funded).
       await ethers.provider.send('hardhat_setBalance', [
         readonly2Address,
         ONE_ETH,
@@ -713,10 +673,6 @@ describe('BucketAuction', function () {
     it('sendTokens & sendRefund', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
 
       await expect(readonlyConn.bid({ value: 100 })).to.emit(
         readonlyConn,
@@ -763,11 +719,7 @@ describe('BucketAuction', function () {
       const readonly2Address = await readonly2.getAddress();
       const readonlyConn2 = ba.connect(readonly2);
 
-      // Fund reader and reader2 for testing
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
+      // Fund reader2 for testing (reader is already funded)
       await ethers.provider.send('hardhat_setBalance', [
         readonly2Address,
         ONE_ETH,
@@ -822,10 +774,6 @@ describe('BucketAuction', function () {
     it('sendAllTokens', async () => {
       // Active auction by setting the block.timestamp to the start time of the auction
       await ethers.provider.send('evm_mine', [auctionStartTimestamp]);
-      await ethers.provider.send('hardhat_setBalance', [
-        readonly.address,
-        ONE_ETH,
-      ]);
 
       await expect(readonlyConn.bid({ value: 100 })).to.emit(
         readonlyConn,

@@ -865,16 +865,6 @@ describe('ERC721CMIRoyaltiesClone', function () {
       // Setup the test context: Update block.timestamp to comply to the stage being active
       await ethers.provider.send('evm_mine', [stageStart - 1]);
 
-      await ethers.provider.send('hardhat_setBalance', [
-        ownerAddress,
-        ONE_HUNDRED_ETH,
-      ]);
-
-      await ethers.provider.send('hardhat_setBalance', [
-        readerAddress,
-        ONE_HUNDRED_ETH,
-      ]);
-
       // Owner mints 1 token with valid proof
       await contract.mintWithLimit(1, 2, ownerProof, 0, '0x00', {
         value: ethers.utils.parseEther('0.1'),
